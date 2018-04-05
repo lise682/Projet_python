@@ -69,7 +69,7 @@ pas_z= (Z_max-Z_min)/(NZ-1) #en m
 #fin calculs
 
 
-
+I=[]
 #debut boucle
 for ZZ in range(0,NZ,1): 	#boucle sur les lignes 
 	for XX in range(0,NX,1):	#boucles sur les colonnes  
@@ -81,8 +81,8 @@ for ZZ in range(0,NZ,1): 	#boucle sur les lignes
 			r_x= TX_x-XX*pas_x #coordonnee x vecteur r
 			r_z= TX_z-ZZ*pas_z #coordonnee z vecteur r
 			r_vecteur=np.array([[r_x],[0],[r_z]])
-			print('r_vecteur')
-			print(r_vecteur)
+			#print('r_vecteur')
+			#print(r_vecteur)
 			#calcul du champ magnetique		
 			#H_teta
 			PV1=produitvectoriel(M,r_vecteur)
@@ -108,22 +108,30 @@ for ZZ in range(0,NZ,1): 	#boucle sur les lignes
 				Z_log_norme_H=log(((H[2].real)**2+(H[2].imag)**2)**0.5)  #log de l intensite de H selon z
 			else :
 				Z_log_norme_H=0
-			print('log norme')
-			print(X_log_norme_H)
-			print(Z_log_norme_H)
+			#print('log norme')
+			#print(X_log_norme_H)
+			#print(Z_log_norme_H)
 			
 			if ((H[0].real)**2+(H[0].imag)**2)**0.5 != 0:
 				if ((H[2].real)**2+(H[2].imag)**2)**0.5	!=0:	                
 					log_norme_H=log((((H[0].real)**2+(H[0].imag)**2)**0.5)**2+(((H[2].real)**2+(H[2].imag)**2)**2)**0.5)
-			print('log_norme_H')
+			#print('log_norme_H')
 			print(log_norme_H)
-            
-		else :
+            		I=I+[log_norme_H]
+		elif XX*pas_x==TX_x and ZZ*pas_z==TX_z :
 			print('on est en position du dipole')
 	#axe_x=np.linspace(,
-		
-#print(r)
-		#print(H_r)
-		#print(H)
+print(I)		
+# Blues
+x=range(X_min, X_max, 5)
+print(x)
+z=range(Z_min, Z_max, 5)
+J = I[:-1, :-1]
+X,Z=np.meshgrid(x,z)
 
+plt.subplot(1,4,1)
+plt.pcolormesh(X, Z, J, cmap=plt.cm.get_cmap('Blues'))
+plt.colorbar()
+plt.axis([-3, 3, -3, 3])
+plt.title('Sequential')
 
